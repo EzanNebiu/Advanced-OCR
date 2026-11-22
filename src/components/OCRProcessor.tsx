@@ -1,4 +1,4 @@
-import { useState, Dispatch, SetStateAction } from 'react';
+import { useState, type Dispatch, type SetStateAction } from 'react';
 import { createWorker } from 'tesseract.js';
 import { Bot, Rocket, Hourglass } from 'lucide-react';
 
@@ -49,13 +49,16 @@ function OCRProcessor({
     setLogs([]);
     
     let combinedText = '';
+    let worker: Awaited<ReturnType<typeof createWorker>> | null = null;
+    let imageIndex = 0;
 
     try {
       addLog('Initializing OCR engine...');
-      const worker = await createWorker(selectedLanguage, 1, {
+      worker = await createWorker(selectedLanguage, 1, {
         logger: (m) => {
           if (m.status === 'recognizing text') {
-            const progressPercent = Math.round(m.progress * 100);
+            // Overall progress across all images, not just the current one
+            const progressPercent = Math.round(((imageIndex + m.progress) / images.length) * 100);
             setProgress(progressPercent);
           }
         },
@@ -64,6 +67,7 @@ function OCRProcessor({
       addLog(`Processing ${images.length} image(s) with ${languages.find(l => l.code === selectedLanguage)?.name} language`);
 
       for (let i = 0; i < images.length; i++) {
+        imageIndex = i;
         setCurrentImage(images[i].name);
         addLog(`Processing image ${i + 1}/${images.length}: ${images[i].name}`);
 
@@ -77,8 +81,6 @@ function OCRProcessor({
         }
       }
 
-      await worker.terminate();
-      
       if (combinedText.trim()) {
         onTextExtracted(combinedText.trim());
         addLog('✓ OCR processing completed successfully!');
@@ -92,6 +94,9 @@ function OCRProcessor({
       addLog(`✗ Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
       alert('An error occurred during OCR processing. Please try again.');
     } finally {
+      if (worker) {
+        await worker.terminate().catch(() => {});
+      }
       setIsProcessing(false);
       setProgress(0);
       setCurrentImage('');

@@ -78,7 +78,7 @@ function Footer() {
 
       <div className="border-t border-white/10 px-4 sm:px-6 lg:px-8 py-4 sm:py-6 text-center">
         <p className="text-xs sm:text-sm text-white/50 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2">
-          <span>© {currentYear} OCR App. Made with by Ezan M. Nebija</span>
+          <span>© {currentYear} OCR App. Made with <Heart className="inline w-3.5 h-3.5 text-red-500 fill-red-500 align-[-2px]" aria-label="love" /> by Ezan M. Nebija</span>
           <span className="hidden sm:inline">•</span>
           <span>Powered by Tesseract.js</span>
         </p>

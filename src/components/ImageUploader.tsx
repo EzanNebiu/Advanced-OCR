@@ -21,8 +21,8 @@ function ImageUploader({ onImagesSelected, images }: ImageUploaderProps) {
       preview: URL.createObjectURL(file),
       name: file.name
     }));
-    onImagesSelected(imageFiles);
-  }, [onImagesSelected]);
+    onImagesSelected([...images, ...imageFiles]);
+  }, [onImagesSelected, images]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -69,7 +69,7 @@ function ImageUploader({ onImagesSelected, images }: ImageUploaderProps) {
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
             {images.map((image, index) => (
               <div 
-                key={index} 
+                key={image.preview} 
                 className="relative rounded-lg sm:rounded-xl overflow-hidden shadow-lg transition-all duration-300 hover:shadow-2xl hover:scale-105 group"
                 onMouseEnter={() => setHoveredImage(image)}
                 onMouseLeave={() => setHoveredImage(null)}
@@ -82,9 +82,10 @@ function ImageUploader({ onImagesSelected, images }: ImageUploaderProps) {
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2 sm:p-3">
                   <p className="text-white text-xs sm:text-sm font-medium truncate">{image.name}</p>
                   <button 
-                    className="absolute top-1 right-1 sm:top-2 sm:right-2 w-6 h-6 sm:w-8 sm:h-8 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-red-600 font-bold text-sm sm:text-base"
-                    onClick={() => removeImage(index)}
+                    className="absolute top-1 right-1 sm:top-2 sm:right-2 w-6 h-6 sm:w-8 sm:h-8 bg-red-500 text-white rounded-full flex items-center justify-center opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300 hover:bg-red-600 font-bold text-sm sm:text-base"
+                    onClick={(e) => { e.stopPropagation(); setHoveredImage(null); removeImage(index); }}
                     type="button"
+                    aria-label={`Remove ${image.name}`}
                   >
                     ✕
                   </button>

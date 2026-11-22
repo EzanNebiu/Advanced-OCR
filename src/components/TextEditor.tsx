@@ -27,9 +27,13 @@ function TextEditor({ text, onTextChange }: TextEditorProps) {
     onTextChange(newText);
   };
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(localText);
-    alert('Text copied to clipboard!');
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(localText);
+      alert('Text copied to clipboard!');
+    } catch {
+      alert('Could not copy to clipboard. Please select the text and copy it manually.');
+    }
   };
 
   const handleClear = () => {

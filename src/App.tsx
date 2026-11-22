@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Search } from 'lucide-react';
 import ImageUploader from './components/ImageUploader';
 import OCRProcessor from './components/OCRProcessor';
@@ -18,15 +18,29 @@ function App() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
   const [selectedLanguage, setSelectedLanguage] = useState('eng');
+  const [hasResult, setHasResult] = useState(false);
+
+  // Revoke object URLs for previews that are no longer shown, to avoid leaking memory
+  const previewUrls = useRef<string[]>([]);
+  useEffect(() => {
+    const current = images.map(img => img.preview);
+    previewUrls.current
+      .filter(url => !current.includes(url))
+      .forEach(url => URL.revokeObjectURL(url));
+    previewUrls.current = current;
+  }, [images]);
+  useEffect(() => () => previewUrls.current.forEach(url => URL.revokeObjectURL(url)), []);
 
   const handleImagesSelected = (selectedImages: ImageFile[]) => {
     setImages(selectedImages);
     setExtractedText('');
+    setHasResult(false);
     setProgress(0);
   };
 
   const handleTextExtracted = (text: string) => {
     setExtractedText(text);
+    setHasResult(true);
   };
 
   const handleTextChange = (newText: string) => {
@@ -36,6 +50,7 @@ function App() {
   const handleClear = () => {
     setImages([]);
     setExtractedText('');
+    setHasResult(false);
     setProgress(0);
   };
 
@@ -71,7 +86,7 @@ function App() {
             />
           )}
 
-          {extractedText && (
+          {hasResult && (
             <>
               <TextEditor 
                 text={extractedText}
