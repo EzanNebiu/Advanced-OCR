@@ -1,19 +1,24 @@
 # Advanced OCR - Image to Text Converter
 
-A powerful web application that extracts text from images using AI-powered OCR (Optical Character Recognition) technology. Built with React, TypeScript, and Tesseract.js.
+A powerful web application that extracts text from images using AI-powered OCR (Optical Character Recognition) technology. Built with React, TypeScript, and Tesseract.js. All processing happens in your browser, so images are never uploaded to a server.
+
+**Live demo:** https://advanced-ocr.ezannebija.dev
+
+![Advanced OCR screenshot](docs/screenshot.webp)
 
 ## 🎯 Features
 
 - **Multi-Image Upload**: Drag and drop or select multiple images at once
 - **AI-Powered OCR**: Extract text from images using Tesseract.js
-- **Language Support**: Multiple language recognition capabilities
+- **Language Support**: English, German, Albanian and Spanish
 - **Text Editor**: Edit extracted text before exporting
 - **Multiple Export Formats**:
   - PDF
   - DOCX (Microsoft Word)
   - TXT (Plain Text)
 - **Modern UI**: Beautiful, responsive interface built with Tailwind CSS
-- **Real-time Progress**: Track OCR processing progress
+- **Real-time Progress**: Track OCR processing progress in a live log
+- **Private by Design**: Recognition runs in a Tesseract.js web worker in your browser
 
 ## 🚀 Getting Started
 
@@ -65,7 +70,7 @@ npm run dev
 
 1. **Upload Images**: Click or drag and drop images into the upload area
 2. **Select Language**: Choose the language of text in your images
-3. **Process Images**: Click the "Extract Text" button to start OCR processing
+3. **Process Images**: Click "Start OCR Processing" to extract the text
 4. **Edit Text**: Review and edit the extracted text if needed
 5. **Export**: Choose your preferred format (PDF, DOCX, or TXT) and download
 
@@ -75,8 +80,8 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## 👨‍💻 Author
 
-**Ezan Nebiu**
+**Ezan M. Nebija** - [ezannebija.dev](https://ezannebija.dev)
 
 ---
 
-Made with ❤️ by Ezan Nebiu
+Made with ❤️ by Ezan M. Nebija
